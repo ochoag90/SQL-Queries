@@ -1,0 +1,76 @@
+Solution #0
+
+SELECT pat.first_name, pat.last_name FROM patrons AS pat
+  INNER JOIN loans AS ln ON pat.id = ln.patron_id
+  WHERE returned_on IS NULL;
+
+##################################################
+
+Solution #1
+
+  SELECT pat.first_name, pat.email FROM patrons AS pat
+  WHERE id NOT IN (SELECT patron_id FROM loans)
+--JOIN loans AS ln ON pat.id = ln.patron_id
+--WHERE patron_id NOT IN patrons ;
+
+##################################################
+
+Solution #2
+
+-- Use a JOIN to find out which patrons haven't had any loans. Select their first name and email address.
+
+SELECT pat.first_name, pat.email FROM patrons AS pat
+   --WHERE id NOT IN (SELECT patron_id FROM loans)
+   LEFT OUTER JOIN loans AS ln ON ln.patron_id = pat.id
+   WHERE ln.patron_id IS NULL;
+   --WHERE pat.id NOT IN ln.patron_id ;
+
+   ##################################################
+
+SOLUTION #3
+
+   -- Create a report that shows the title of the book, first and last name of the patron, email and all date fields of the loan.
+
+SELECT  bks.title,
+        pat.first_name, 
+        pat.last_name, 
+        ln.loaned_on,
+        ln.return_by, 
+        ln.returned_on  FROM books AS bks
+  INNER JOIN loans AS ln ON bks.id = ln.book_id
+  INNER JOIN patrons AS pat ON ln.patron_id = pat.id;
+
+SOLUTION #4
+
+##################################################
+
+-- Create a list of all books in both north and south locations
+
+SELECT * FROM books_north UNION ALL SELECT * FROM books_south;
+
+
+SOLUTION $5
+
+##################################################
+
+-- Create a list of unique books. 
+-- Books that are in the north or south location, but not in both locations.
+
+SELECT title FROM books_north UNION SELECT title FROM books_south;
+
+
+SOLUTION #6
+
+##################################################
+
+-- Create a list of duplicate books. 
+-- Book titles that exist in BOTH north AND south locations
+
+SELECT title FROM books_north INTERSECT SELECT title FROm books_south;
+
+
+
+
+
+
+
